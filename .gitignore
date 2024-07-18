@@ -37,3 +37,6 @@ msbuild.wrn
 .idea/
 
 keys/
+
+node_modules/
+Sso/wwwroot/app/

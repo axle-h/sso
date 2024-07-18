@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace Sso.Pages.Error;
 
 [AllowAnonymous]
-[SecurityHeaders]
 public class Index : PageModel
 {
     private readonly IIdentityServerInteractionService _interaction;
