@@ -1,12 +1,13 @@
 ﻿using Sso;
 using Serilog;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.UseSerilog((ctx, lc) => lc
-    .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
-    .Enrich.FromLogContext()
-    .ReadFrom.Configuration(ctx.Configuration));
+builder.Host.UseSerilog((context, services, configuration) => configuration
+    .ReadFrom.Configuration(context.Configuration)
+    .ReadFrom.Services(services)
+    .Enrich.FromLogContext());
 
 builder.Services.AddRazorPages();
 
@@ -14,6 +15,8 @@ var isBuilder = builder.Services.AddIdentityServer(options =>
     {
         // TODO disable on ssl
         options.Authentication.CookieSameSiteMode = SameSiteMode.Lax;
+        
+        options.KeyManagement.Enabled = true;
                 
         options.Events.RaiseErrorEvents = true;
         options.Events.RaiseInformationEvents = true;
@@ -25,6 +28,7 @@ var isBuilder = builder.Services.AddIdentityServer(options =>
     })
     .AddTestUsers(TestUsers.Users);
 
+
 // in-memory, code config
 isBuilder.AddInMemoryIdentityResources(Config.IdentityResources);
 isBuilder.AddInMemoryApiScopes(Config.ApiScopes);
@@ -35,7 +39,25 @@ builder.Services.AddAuthentication();
 
 var app = builder.Build();
 
-app.UseSerilogRequestLogging();
+app.UseSerilogRequestLogging(options =>
+{
+    options.GetLevel = (context, duration, exception) =>
+    {
+        if (context.Response.StatusCode > 499 || exception is not null)
+        {
+            // error
+            return LogEventLevel.Error;
+        }
+
+        if (duration > 5000)
+        {
+            // slow request
+            return LogEventLevel.Warning;
+        }
+
+        return LogEventLevel.Debug;
+    };
+});
     
 if (app.Environment.IsDevelopment())
 {
