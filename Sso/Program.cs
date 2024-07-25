@@ -46,8 +46,6 @@ var isBuilder = builder.Services.AddIdentityServer(options =>
 
 // in-memory, code config
 isBuilder.AddInMemoryIdentityResources(Config.IdentityResources);
-isBuilder.AddInMemoryApiScopes(Config.ApiScopes);
-// isBuilder.AddInMemoryClients(Config.Clients);
 
 builder.Services.AddAuthentication();
 

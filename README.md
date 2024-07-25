@@ -15,3 +15,4 @@ TODO:
 * favicon
 * Drop Account folder
 * Configurable users
+* Identity resource in DB
