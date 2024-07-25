@@ -40,3 +40,5 @@ keys/
 
 node_modules/
 Sso/wwwroot/app/
+
+data.db*

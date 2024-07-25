@@ -1,6 +1,8 @@
-﻿using Sso;
+﻿using Microsoft.EntityFrameworkCore;
+using Sso;
 using Serilog;
 using Serilog.Events;
+using Sso.Migrations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,11 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
     .Enrich.FromLogContext());
 
 builder.Services.AddRazorPages();
+
+Action<DbContextOptionsBuilder> dbBuilder = b => b.UseSqlite(
+    builder.Configuration.GetConnectionString("Db") ?? "Data Source=data.db",
+    sql => sql.MigrationsAssembly(typeof(Program).Assembly.GetName().Name)
+);
 
 var isBuilder = builder.Services.AddIdentityServer(options =>
     {
@@ -26,13 +33,21 @@ var isBuilder = builder.Services.AddIdentityServer(options =>
         // see https://docs.duendesoftware.com/identityserver/v6/fundamentals/resources/
         options.EmitStaticAudienceClaim = true;
     })
+    .AddConfigurationStore(options =>
+    {
+        options.ConfigureDbContext = dbBuilder;
+    })
+    .AddOperationalStore(options =>
+    {
+        options.ConfigureDbContext = dbBuilder;
+    })
     .AddTestUsers(TestUsers.Users);
 
 
 // in-memory, code config
 isBuilder.AddInMemoryIdentityResources(Config.IdentityResources);
 isBuilder.AddInMemoryApiScopes(Config.ApiScopes);
-isBuilder.AddInMemoryClients(Config.Clients);
+// isBuilder.AddInMemoryClients(Config.Clients);
 
 builder.Services.AddAuthentication();
 
@@ -71,5 +86,7 @@ app.UseAuthorization();
         
 app.MapRazorPages()
     .RequireAuthorization();
-    
+
+app.MigrateDatabase();
+
 app.Run();
