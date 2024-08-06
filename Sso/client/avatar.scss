@@ -1,0 +1,28 @@
+
+$avatar-bg: $primary;
+$avatar-color: $white;
+$avatar-width: 40px;
+
+.avatar {  
+  position: relative;
+  width: $avatar-width;
+  height: $avatar-width;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: $avatar-color;
+  line-height: 1;
+  font-size: 14px;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: $avatar-bg;
+
+  & > img,
+  & > svg {
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+}

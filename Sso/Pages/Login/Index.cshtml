@@ -5,11 +5,20 @@
     Layout = "Shared/_LayoutHero";
 }
 
-<partial name="_ValidationSummary" />
+<h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">
+    @if (ViewContext.ModelState.IsValid == false)
+    {
+        <span class="text-danger">
+            <b>Oops!</b> Looks like that's the wrong username or password.
+        </span>
+    }
+    else
+    {
+        <b>Hi!</b> <text>Sign in to your ax-h account.</text>
+    }
+</h5>
 
-<h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;"><b>Hi!</b> Sign in to your ax-h account.</h5>
-
-<form asp-page="/Account/Login/Index">
+<form asp-page="/Login/Index">
     <input type="hidden" asp-for="Input.ReturnUrl" />
 
     <div class="form-outline mb-4">
@@ -23,6 +32,6 @@
     </div>
 
     <div class="pt-1 mb-4">
-        <button class="btn btn-dark btn-lg btn-block" type="submit">Login</button>
+        <button class="btn btn-outline-primary btn-lg btn-block px-5" type="submit">Login</button>
     </div>
 </form>

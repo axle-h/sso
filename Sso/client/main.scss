@@ -1,9 +1,18 @@
 @import "bootstrap/scss/functions";
 
+$logo-palette-1: #18C5E0;
+$logo-palette-2: #008080;
+$logo-palette-3: #5095E8;
+$logo-palette-4: #34ADE5;
+$logo-palette-5: #808080;
+$logo-palette-6: #BB38F6;
+$logo-palette-7: #9E51F2;
+
+$primary: $logo-palette-6;
+$secondary: $logo-palette-5;
+
 @import "bootstrap/scss/variables";
 @import "bootstrap/scss/variables-dark";
-
-// Include any default map overrides here
 
 @import "bootstrap/scss/maps";
 @import "bootstrap/scss/mixins";
@@ -18,7 +27,7 @@
 @import "bootstrap/scss/forms";
 @import "bootstrap/scss/buttons";
 @import "bootstrap/scss/transitions";
-//@import "bootstrap/scss/dropdown";
+@import "bootstrap/scss/dropdown";
 @import "bootstrap/scss/button-group";
 @import "bootstrap/scss/nav";
 @import "bootstrap/scss/navbar";
@@ -43,3 +52,13 @@
 @import "bootstrap/scss/helpers";
 
 @import "bootstrap/scss/utilities/api";
+
+@import "./avatar";
+@import "./theme-toggle";
+
+svg.bi {
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  vertical-align: -.125em;
+}

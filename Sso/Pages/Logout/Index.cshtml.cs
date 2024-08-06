@@ -30,6 +30,6 @@ public class Index(IIdentityServerInteractionService interaction, IEventService 
         // raise the logout event
         await events.RaiseAsync(new UserLogoutSuccessEvent(User.GetSubjectId(), User.GetDisplayName()));
 
-        return RedirectToPage("/Account/Logout/LoggedOut", new { logoutId });
+        return RedirectToPage("/Logout/LoggedOut", new { logoutId });
     }
 }

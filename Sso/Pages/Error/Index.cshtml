@@ -1,0 +1,29 @@
+@page
+@model Sso.Pages.Error.Index
+
+@{
+    Layout = "Shared/_LayoutHero";
+}
+
+<h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;"><b>Oops!</b> Looks like there was a problem.</h5>
+
+@if (Model.Error != null)
+{
+    <div class="alert alert-danger mb-3" role="alert">
+        <h4 class="alert-heading">@Model.Error.Error</h4>
+        @if (Model.Error.ErrorDescription != null)
+        {
+            <p>@Model.Error.ErrorDescription</p>
+        }
+        @if (Model.Error.RequestId != null)
+        {
+            <p>Request Id: @Model.Error.RequestId</p>
+        }
+    </div>
+}
+
+<div class="pt-1 mb-4">
+    <a class="btn btn-outline-primary btn-lg btn-block" asp-page="/Index">Back Home</a>
+</div>
+
+

@@ -1,11 +1,12 @@
 @page
+@using Sso
 
 @{
-    Layout = "Shared/_LayoutNav";
+    Layout = "_LayoutHero";
+    var user = User.TestUser()!;
+    
 }
 
-<div class="container py-4">
-    <h1>
-        Nothing to see here.
-    </h1>
-</div>
+<h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">
+    <b>Hi @user.GivenName()!</b> You are now logged in.
+</h5>

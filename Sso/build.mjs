@@ -40,7 +40,7 @@ await esbuild.build({
         }),
         sassPlugin(),
         purgeCSSPlugin({
-            content: ['./Pages/**/*.cshtml']
+            content: ['./Pages/**/*.cshtml', "wwwroot/app/**/*.js"]
         }),
     ]
 })

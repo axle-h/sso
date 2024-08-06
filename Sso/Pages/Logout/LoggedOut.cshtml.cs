@@ -7,17 +7,14 @@ namespace Sso.Pages.Logout;
 [AllowAnonymous]
 public class LoggedOut(IIdentityServerInteractionService interactionService) : PageModel
 {
-    public LoggedOutViewModel View { get; set; } = default!;
+    public string? PostLogoutRedirectUri { get; set; }
+    public string? ClientName { get; set; }
 
     public async Task OnGet(string? logoutId)
     {
         // get context information (client name, post logout redirect URI and iframe for federated signout)
         var logout = await interactionService.GetLogoutContextAsync(logoutId);
-
-        View = new LoggedOutViewModel
-        {
-            PostLogoutRedirectUri = logout?.PostLogoutRedirectUri,
-            ClientName = string.IsNullOrEmpty(logout?.ClientName) ? logout?.ClientId : logout?.ClientName
-        };
+        PostLogoutRedirectUri = logout?.PostLogoutRedirectUri;
+        ClientName = string.IsNullOrEmpty(logout?.ClientName) ? logout?.ClientId : logout.ClientName;
     }
 }

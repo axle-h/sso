@@ -1,0 +1,26 @@
+:root {
+  --display-light: none;
+  --display-dark: none;
+}
+
+[data-bs-theme="light"] {
+  --display-light: inline-block;
+}
+[data-bs-theme="dark"] {
+  --display-dark: inline-block;
+}
+
+.theme-toggle {
+  cursor: pointer;
+  svg {
+    width: 20px !important;
+    height: 20px !important;
+
+    &.bi-moon-stars-fill {
+      display: var(--display-light);
+    }
+    &.bi-sun {
+      display: var(--display-dark);
+    }
+  }
+}

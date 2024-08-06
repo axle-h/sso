@@ -18,18 +18,22 @@
 
 	<ItemGroup>
 	  <Compile Remove="wwwroot\app\**" />
+	  <Compile Remove="obj\**" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <EmbeddedResource Remove="wwwroot\app\**" />
+	  <EmbeddedResource Remove="obj\**" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <Content Remove="wwwroot\app\**" />
+	  <Content Remove="obj\**" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <None Remove="wwwroot\app\**" />
+	  <None Remove="obj\**" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -37,6 +41,14 @@
 	  <_ContentIncludedByDefault Remove="wwwroot\app\main.css.map" />
 	  <_ContentIncludedByDefault Remove="wwwroot\app\main.js" />
 	  <_ContentIncludedByDefault Remove="wwwroot\app\main.js.map" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <AdditionalFiles Include="Pages\AccessDenied.cshtml" />
+	  <AdditionalFiles Include="Pages\Error\Index.cshtml" />
+	  <AdditionalFiles Include="Pages\Login\Index.cshtml" />
+	  <AdditionalFiles Include="Pages\Logout\Index.cshtml" />
+	  <AdditionalFiles Include="Pages\Logout\LoggedOut.cshtml" />
 	</ItemGroup>
 
 </Project>

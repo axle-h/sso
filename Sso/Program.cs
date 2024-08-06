@@ -21,7 +21,11 @@ Action<DbContextOptionsBuilder> dbBuilder = b => b.UseSqlite(
 var isBuilder = builder.Services.AddIdentityServer(options =>
     {
         // TODO disable on ssl
-        options.Authentication.CookieSameSiteMode = SameSiteMode.Lax;
+        options.Authentication.CookieSameSiteMode = SameSiteMode.Strict;
+        
+        options.UserInteraction.LoginUrl = "/Login";
+        options.UserInteraction.LogoutUrl = "/Logout";
+        options.UserInteraction.ErrorUrl = "/Error";
         
         options.KeyManagement.Enabled = true;
                 
@@ -79,6 +83,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseStaticFiles();
 app.UseRouting();
+app.UseStatusCodePagesWithReExecute("/Error/Status/{0}");
+
 app.UseIdentityServer();
 app.UseAuthorization();
         
