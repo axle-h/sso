@@ -16,4 +16,27 @@
 		<PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Compile Remove="wwwroot\app\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Remove="wwwroot\app\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Remove="wwwroot\app\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="wwwroot\app\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <_ContentIncludedByDefault Remove="wwwroot\app\main.css" />
+	  <_ContentIncludedByDefault Remove="wwwroot\app\main.css.map" />
+	  <_ContentIncludedByDefault Remove="wwwroot\app\main.js" />
+	  <_ContentIncludedByDefault Remove="wwwroot\app\main.js.map" />
+	</ItemGroup>
+
 </Project>

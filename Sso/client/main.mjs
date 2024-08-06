@@ -1,4 +1,3 @@
 import './main.scss'
-import { Button } from 'bootstrap'
-
-console.log('hello world')
+import 'bootstrap/js/src/button'
+import 'bootstrap/js/src/collapse'
