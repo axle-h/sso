@@ -22,7 +22,7 @@ public class Index(
     {
         if (User.Identity?.IsAuthenticated != true)
         {
-            return RedirectToPage("/");
+            return RedirectToPage("/Index");
         }
         
         // if there's no current logout context, we need to create one

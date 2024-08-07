@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sso
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sso
+  template:
+    metadata:
+      labels:
+        app: sso
+    spec:
+      volumes:
+        - name: data
+          hostPath:
+            path: /var/sso
+            type: DirectoryOrCreate
+      containers:
+        - name: sso
+          image: ghcr.io/axle-h/sso:latest
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          ports:
+            - name: http
+              containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: http

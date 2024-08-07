@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/router.middlewares: sso-redirect-http-https@kubernetescrd
+  name: sso
+  labels:
+    app: sso
+spec:
+  rules:
+    - host: sso.ax-h.com
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: sso
+                port:
+                  name : http
+  tls:
+    - hosts:
+        - sso.ax-h.com
+      secretName: sso-axh-com-tls
