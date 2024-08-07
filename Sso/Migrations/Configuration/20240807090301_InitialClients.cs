@@ -18,16 +18,16 @@ public partial class InitialClients : Migration
             
         factory.Client("make-money", "Make Money", GrantTypes.CodeAndClientCredentials, ["openid", "profile", "email", "roles"])
             .RandomSecret()
-            .RedirectUri("http://localhost:3000/api/auth/callback/axh-sso")
-            .FrontChannelLogoutUri("http://localhost:3000/logout-oidc")
-            .PostLogoutRedirectUri("http://localhost:3000/logout-oidc")
+            .RedirectUri("https://money.ax-h.com/api/auth/callback/axh-sso")
+            .FrontChannelLogoutUri("https://money.ax-h.com/logout-oidc")
+            .PostLogoutRedirectUri("https://money.ax-h.com/logout-oidc")
             .AllowOfflineAccess();
             
         factory.Client("make-movies", "Make Movies", GrantTypes.CodeAndClientCredentials, ["openid", "profile", "email", "roles"])
             .RandomSecret()
-            .RedirectUri("http://localhost:3000/api/auth/callback/axh-sso")
-            .FrontChannelLogoutUri("http://localhost:3000/logout-oidc")
-            .PostLogoutRedirectUri("http://localhost:3000/logout-oidc")
+            .RedirectUri("https://movies.ax-h.com/api/auth/callback/axh-sso")
+            .FrontChannelLogoutUri("https://movies.ax-h.com/logout-oidc")
+            .PostLogoutRedirectUri("https://movies.ax-h.com/logout-oidc")
             .AllowOfflineAccess();
     }
 

@@ -34,7 +34,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/axle-h/make-movies-${{ inputs.name }}
+          images: ghcr.io/axle-h/${{ inputs.name }}
           tags: |
             type=sha
             type=ref,event=branch,enable=${{ github.ref != format('refs/heads/{0}', 'main') }}
