@@ -1,7 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Sso;
+﻿using Duende.IdentityServer.Models;
+using IdentityModel;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Events;
+using Sso.Identity;
 using Sso.Migrations;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,9 +21,31 @@ Action<DbContextOptionsBuilder> dbBuilder = b => b.UseSqlite(
     sql => sql.MigrationsAssembly(typeof(Program).Assembly.GetName().Name)
 );
 
+builder.Services.AddDbContext<SsoDbContext>(dbBuilder);
+builder.Services
+    .AddIdentity<SsoUser, IdentityRole>(options =>
+    {
+        options.Password.RequireDigit = true;
+        options.Password.RequiredLength = 10;
+        options.Password.RequiredUniqueChars = 5;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireLowercase = true;
+        options.Password.RequireUppercase = true;
+        options.Password.RequireDigit = true;
+
+        options.User.RequireUniqueEmail = true;
+
+        options.Lockout.AllowedForNewUsers = true;
+        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+        options.Lockout.MaxFailedAccessAttempts = 5;
+    })
+    .AddEntityFrameworkStores<SsoDbContext>()
+    .AddClaimsPrincipalFactory<SsoUserClaimsPrincipalFactory>()
+    .AddTokenProvider<DataProtectorTokenProvider<SsoUser>>(TokenOptions.DefaultProvider);
+
+
 var isBuilder = builder.Services.AddIdentityServer(options =>
     {
-        // TODO disable on ssl
         options.Authentication.CookieSameSiteMode = SameSiteMode.Strict;
         
         options.UserInteraction.LoginUrl = "/Login";
@@ -37,22 +62,42 @@ var isBuilder = builder.Services.AddIdentityServer(options =>
         // see https://docs.duendesoftware.com/identityserver/v6/fundamentals/resources/
         options.EmitStaticAudienceClaim = true;
     })
-    .AddConfigurationStore(options =>
+    .AddConfigurationStore(options => options.ConfigureDbContext = dbBuilder)
+    .AddOperationalStore(options => options.ConfigureDbContext = dbBuilder)
+    .AddAspNetIdentity<SsoUser>();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.AccessDeniedPath = "/AccessDenied";
+    options.LoginPath = "/Login";
+    options.LogoutPath = "/Logout";
+    options.ReturnUrlParameter = "returnUrl";
+    
+    options.Cookie.Name = "sso.ax-h";
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SameSite = SameSiteMode.Strict;
+    
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(720);
+    options.SlidingExpiration = true;
+});
+
+
+isBuilder.AddInMemoryIdentityResources([
+    new IdentityResources.OpenId(),
+    new IdentityResources.Profile(),
+    new IdentityResources.Email(),
+    new IdentityResource
     {
-        options.ConfigureDbContext = dbBuilder;
-    })
-    .AddOperationalStore(options =>
-    {
-        options.ConfigureDbContext = dbBuilder;
-    })
-    .AddTestUsers(TestUsers.Users);
+        Name = "roles",
+        DisplayName = "Roles",
+        UserClaims = { JwtClaimTypes.Role }
+    }
+]);
 
-
-// in-memory, code config
-isBuilder.AddInMemoryIdentityResources(Config.IdentityResources);
-
-builder.Services.AddAuthentication();
-
+builder.Services
+    .AddHostedService<MigrationService>()
+    .AddOptions<MigrationOptions>()
+    .BindConfiguration("Migration");
 
 var app = builder.Build();
 
@@ -90,7 +135,5 @@ app.UseAuthorization();
         
 app.MapRazorPages()
     .RequireAuthorization();
-
-app.MigrateDatabase();
 
 app.Run();

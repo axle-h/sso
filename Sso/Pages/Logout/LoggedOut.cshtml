@@ -7,25 +7,24 @@
 
 <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;"><b>See ya!</b> You are now logged out.</h5>
 
-@if (Model.PostLogoutRedirectUri != null)
+@if (Model.PostLogoutRedirectUri is not null && Model.ClientName is not null)
 {
-<p>
-    <a class="PostLogoutRedirectUri" href="@Model.PostLogoutRedirectUri">
-        Return to @Model.ClientName
-    </a>
-</p>
+    <div class="d-flex align-items-center gap-2 mb-4">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <span>Returning to Make Money</span>
+    </div>
+    
+    <script>
+        setTimeout(() => {
+            window.location = '@Model.PostLogoutRedirectUri'
+        }, 5000)
+    </script>
 }
-
-<div class="pt-1 mb-4">
-    <a class="btn btn-outline-primary btn-lg btn-block" asp-page="/Login/Index">Login Again</a>
-</div>
-
-
-<script>
-    window.addEventListener("load", function () {
-        const a = document.querySelector("a.PostLogoutRedirectUri");
-        if (a) {
-            window.location = a.href;
-        }
-    });
-</script>
+else
+{
+    <div class="pt-1 mb-4">
+        <a class="btn btn-outline-primary btn-lg btn-block" asp-page="/Login">Login Again</a>
+    </div>    
+}

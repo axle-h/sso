@@ -1,7 +1,11 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@using Sso
+@using Microsoft.AspNetCore.Identity
+@using Sso.Identity
+
+@inject UserManager<SsoUser> UserManager
+
 @{
-    var user = Context.User.TestUser();
+    var user = await UserManager.GetUserAsync(User);
 }
 
 <nav class="navbar navbar-expand bg-body-tertiary">
@@ -19,6 +23,7 @@
                     </a>
                     <ul class="dropdown-menu" style="right: 0; left: initial;">
                         <li><a class="dropdown-item" asp-page="/Logout/Index">Logout</a></li>
+                        <li><a class="dropdown-item" asp-page="/ChangePassword">Change Password</a></li>
                     </ul>
                 </li>
             }

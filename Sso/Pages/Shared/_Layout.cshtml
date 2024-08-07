@@ -1,3 +1,9 @@
+@inject IFileVersionProvider FileVersionProvider
+
+@{
+    string FileVersionHref(string path) => FileVersionProvider.AddFileVersionToPath("/", path);
+}
+
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
 <head>
@@ -15,8 +21,8 @@
     <meta name="msapplication-TileColor" content="#34ade5">
     <meta name="theme-color" content="#ffffff">
     
-    <link async rel="stylesheet" href="~/app/main.css" />
-    <script async src="~/app/main.js"></script>
+    <link async rel="stylesheet" href="@FileVersionHref("app/main.css")" />
+    <script async src="@FileVersionHref("app/main.js")"></script>
 </head>
 <body>
     @RenderBody()

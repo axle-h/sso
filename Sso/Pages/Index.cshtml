@@ -1,12 +1,14 @@
 @page
-@using Sso
+@using Microsoft.AspNetCore.Identity
+@using Sso.Identity
+
+@inject UserManager<SsoUser> UserManager;
 
 @{
     Layout = "_LayoutHero";
-    var user = User.TestUser()!;
-    
+    var user = await UserManager.GetUserAsync(User);
 }
 
-<h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">
-    <b>Hi @user.GivenName()!</b> You are now logged in.
+<h5 class="fw-normal pb-3" style="letter-spacing: 1px;">
+    <b>Hi @user?.FirstName!</b> You are logged in.
 </h5>

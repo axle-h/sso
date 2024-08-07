@@ -7,13 +7,15 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Duende.IdentityServer.EntityFramework" Version="7.0.5" />
+		<PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="7.0.6" />
+		<PackageReference Include="Duende.IdentityServer.EntityFramework" Version="7.0.6" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.7" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.7">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.7" />
-		<PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
+		<PackageReference Include="Serilog.AspNetCore" Version="8.0.2" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -46,7 +48,6 @@
 	<ItemGroup>
 	  <AdditionalFiles Include="Pages\AccessDenied.cshtml" />
 	  <AdditionalFiles Include="Pages\Error\Index.cshtml" />
-	  <AdditionalFiles Include="Pages\Login\Index.cshtml" />
 	  <AdditionalFiles Include="Pages\Logout\Index.cshtml" />
 	  <AdditionalFiles Include="Pages\Logout\LoggedOut.cshtml" />
 	</ItemGroup>

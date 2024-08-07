@@ -4,13 +4,19 @@ using Duende.IdentityServer.Extensions;
 using Duende.IdentityServer.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Sso.Identity;
 
 namespace Sso.Pages.Logout;
 
 [AllowAnonymous]
-public class Index(IIdentityServerInteractionService interaction, IEventService events) : PageModel
+public class Index(
+    IIdentityServerInteractionService interaction,
+    IEventService events,
+    SignInManager<SsoUser> signInManager
+) : PageModel
 {
     public async Task<IActionResult> OnGet(string? logoutId)
     {
@@ -24,11 +30,9 @@ public class Index(IIdentityServerInteractionService interaction, IEventService 
         // this can still return null if there is no context needed
         logoutId ??= await interaction.CreateLogoutContextAsync();
 
-        // delete local authentication cookie
-        await HttpContext.SignOutAsync();
-
-        // raise the logout event
         await events.RaiseAsync(new UserLogoutSuccessEvent(User.GetSubjectId(), User.GetDisplayName()));
+        
+        await signInManager.SignOutAsync();
 
         return RedirectToPage("/Logout/LoggedOut", new { logoutId });
     }

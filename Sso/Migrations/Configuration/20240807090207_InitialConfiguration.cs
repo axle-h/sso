@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Sso.Migrations.Configuration
 {
     /// <inheritdoc />
-    public partial class InitialIdentityServerConfigurationDbMigration : Migration
+    public partial class InitialConfiguration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

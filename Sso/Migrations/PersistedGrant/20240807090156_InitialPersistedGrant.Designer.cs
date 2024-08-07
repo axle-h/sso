@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Sso.Migrations.PersistedGrant
 {
     [DbContext(typeof(PersistedGrantDbContext))]
-    [Migration("20240723065204_InitialIdentityServerPersistedGrantDbMigration")]
-    partial class InitialIdentityServerPersistedGrantDbMigration
+    [Migration("20240807090156_InitialPersistedGrant")]
+    partial class InitialPersistedGrant
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

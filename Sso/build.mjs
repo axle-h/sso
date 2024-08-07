@@ -22,10 +22,10 @@ const purgeCSSPlugin = (options = {}) => {
                         await writeFile(result.file, result.css)
                     }
                 }
-            });
+            })
         },
-    };
-};
+    }
+}
 
 await esbuild.build({
     metafile: true,
