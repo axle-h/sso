@@ -1,5 +1,6 @@
 ﻿using Duende.IdentityServer.Models;
 using IdentityModel;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -14,12 +15,19 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
     .ReadFrom.Services(services)
     .Enrich.FromLogContext());
 
+builder.Services.AddHealthChecks();
+
 builder.Services.AddRazorPages();
 
-Action<DbContextOptionsBuilder> dbBuilder = b => b.UseSqlite(
-    builder.Configuration.GetConnectionString("Db") ?? "Data Source=data.db",
-    sql => sql.MigrationsAssembly(typeof(Program).Assembly.GetName().Name)
-);
+var dbUrl = builder.Configuration.GetConnectionString("Db") ??
+            throw new InvalidOperationException("Db connection string is required");
+
+Action<DbContextOptionsBuilder> dbBuilder = b =>
+{
+    b.UseSqlite(dbUrl, sql =>
+        sql.MigrationsAssembly(typeof(Program).Assembly.GetName().Name)
+    );
+};
 
 builder.Services.AddDbContext<SsoDbContext>(dbBuilder);
 builder.Services
@@ -135,5 +143,7 @@ app.UseAuthorization();
         
 app.MapRazorPages()
     .RequireAuthorization();
+
+app.MapHealthChecks("/health/live", new HealthCheckOptions { Predicate = _ => false });
 
 app.Run();

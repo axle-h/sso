@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "build.mjs",
   "scripts": {
-    "start": "node build.mjs"
+    "build": "node build.mjs"
   },
   "author": "",
   "license": "ISC",
