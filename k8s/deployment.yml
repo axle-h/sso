@@ -21,6 +21,9 @@ spec:
         - name: sso
           image: ghcr.io/axle-h/sso:latest
           imagePullPolicy: Always
+          env:
+            - name: ConnectionStrings__IssuerUri
+              value: "https://sso.ax-h.com"
           volumeMounts:
             - name: data
               mountPath: /data

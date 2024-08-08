@@ -51,10 +51,10 @@ builder.Services
     .AddClaimsPrincipalFactory<SsoUserClaimsPrincipalFactory>()
     .AddTokenProvider<DataProtectorTokenProvider<SsoUser>>(TokenOptions.DefaultProvider);
 
-
+var issuerUri = builder.Configuration.GetConnectionString("IssuerUri");
 var isBuilder = builder.Services.AddIdentityServer(options =>
     {
-        options.Authentication.CookieSameSiteMode = SameSiteMode.Strict;
+        options.IssuerUri = issuerUri;
         
         options.UserInteraction.LoginUrl = "/Login";
         options.UserInteraction.LogoutUrl = "/Logout";
