@@ -56,9 +56,13 @@ $secondary: $logo-palette-5;
 @import "./avatar";
 @import "./theme-toggle";
 
-svg.bi {
+svg  {
   width: 1em;
   height: 1em;
   display: inline-block;
   vertical-align: -.125em;
+}
+
+.dvh-100 {
+  height: 100dvh !important;
 }
