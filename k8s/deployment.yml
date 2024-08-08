@@ -22,8 +22,8 @@ spec:
           image: ghcr.io/axle-h/sso:latest
           imagePullPolicy: Always
           env:
-            - name: ConnectionStrings__IssuerUri
-              value: "https://sso.ax-h.com"
+            - name: ASPNETCORE_FORWARDEDHEADERS_ENABLED
+              value: "true"
           volumeMounts:
             - name: data
               mountPath: /data
