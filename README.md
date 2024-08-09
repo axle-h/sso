@@ -24,6 +24,3 @@ dotnet ef migrations add InitialConfiguration -c ConfigurationDbContext -o Migra
 cd Sso
 dotnet ef migrations add InitialSsoUser -c SsoDbContext -o Migrations/Sso
 ```
-
-client: make-money, secret: B8596107-F1AE-43D8-86E7-E15BC5A3D56C
-client: make-movies, secret: E8F26872-E61A-4586-A2A7-8A2406441318
