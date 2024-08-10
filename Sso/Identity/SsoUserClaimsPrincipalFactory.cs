@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 
 namespace Sso.Identity;
 
-public class SsoUserClaimsPrincipalFactory(UserManager<SsoUser> userManager, IOptions<IdentityOptions> optionsAccessor)
+public class SsoUserClaimsPrincipalFactory(SsoUserManager userManager, IOptions<IdentityOptions> optionsAccessor)
     : UserClaimsPrincipalFactory<SsoUser>(userManager, optionsAccessor)
 {
     protected override async Task<ClaimsIdentity> GenerateClaimsAsync(SsoUser user)

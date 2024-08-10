@@ -1,0 +1,8 @@
+@if (!ViewContext.ModelState.IsValid
+     && ViewContext.ModelState[""] is not null
+     && ViewContext.ModelState[""]!.Errors.Count > 0)
+{
+    <p class="form-text text-danger">
+        @ViewContext.ModelState[""]!.Errors.First().ErrorMessage
+    </p>
+}

@@ -1,0 +1,75 @@
+@page
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Sso.Pages.Admin
+@model Sso.Pages.Admin.ListUsers
+
+@{
+    Layout = "_LayoutHero";
+}
+
+<h1 class="hero-title">
+    Registered Users
+</h1>
+
+<div class="mb-3">
+    <a asp-page="/Admin/NewUser" class="btn btn-outline-success pe-3">
+        <partial name="Icons/Plus"/>
+        New User
+    </a>
+</div>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">User</th>
+        <th scope="col">Email</th>
+        <th scope="col">Name</th>
+        <th></th>
+    </tr>
+    </thead>
+    
+    @foreach (var user in Model.Users)
+    {
+        <tr class="align-middle">
+            <td>@user.UserName</td>
+            <td>@user.Email</td>
+            <td>@user.FirstName @user.LastName</td>
+            <td>
+                <a asp-page="/Admin/UpdateUser" asp-route-username="@user.UserName" type="button" class="btn btn-outline-primary">
+                    <partial name="Icons/Edit"/>
+                </a>
+                @if (User.Identity!.Name != user.UserName)
+                {
+                    <button type="button"
+                            class="btn btn-outline-danger"
+                            data-delete-username="@user.UserName"
+                            data-bs-toggle="modal"
+                            data-bs-target="#delete-user-modal">
+                        <partial name="Icons/Trash"/>
+                    </button>
+                }
+            </td>
+        </tr>
+        }
+</table>
+
+<div class="modal fade" id="delete-user-modal" tabindex="-1" aria-labelledby="delete-user-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="delete-user-label">Delete User</h1>
+            </div>
+            <div class="modal-body">
+                Are you sure, this will delete <b class="delete-user-name">UNKNOWN</b> permanently.
+            </div>
+            <div class="modal-footer">
+                <form method="post">
+                    <input type="hidden" asp-for="Model.Action" value="@UserActionType.Delete" />
+                    <input type="hidden" asp-for="Model.Username" value="" />
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete User</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

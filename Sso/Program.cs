@@ -33,13 +33,13 @@ builder.Services.AddDbContext<SsoDbContext>(dbBuilder);
 builder.Services
     .AddIdentity<SsoUser, IdentityRole>(options =>
     {
-        options.Password.RequireDigit = true;
+        
         options.Password.RequiredLength = 10;
         options.Password.RequiredUniqueChars = 5;
-        options.Password.RequireNonAlphanumeric = false;
         options.Password.RequireLowercase = true;
         options.Password.RequireUppercase = true;
-        options.Password.RequireDigit = true;
+        options.Password.RequireDigit = false;
+        options.Password.RequireNonAlphanumeric = false;
 
         options.User.RequireUniqueEmail = true;
 
@@ -47,6 +47,7 @@ builder.Services
         options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
         options.Lockout.MaxFailedAccessAttempts = 5;
     })
+    .AddUserManager<SsoUserManager>()
     .AddEntityFrameworkStores<SsoDbContext>()
     .AddClaimsPrincipalFactory<SsoUserClaimsPrincipalFactory>()
     .AddTokenProvider<DataProtectorTokenProvider<SsoUser>>(TokenOptions.DefaultProvider);

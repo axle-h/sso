@@ -23,7 +23,7 @@ $secondary: $logo-palette-5;
 //@import "bootstrap/scss/images";
 @import "bootstrap/scss/containers";
 @import "bootstrap/scss/grid";
-//@import "bootstrap/scss/tables";
+@import "bootstrap/scss/tables";
 @import "bootstrap/scss/forms";
 @import "bootstrap/scss/buttons";
 //@import "bootstrap/scss/transitions";
@@ -41,7 +41,7 @@ $secondary: $logo-palette-5;
 //@import "bootstrap/scss/list-group";
 //@import "bootstrap/scss/close";
 //@import "bootstrap/scss/toasts";
-//@import "bootstrap/scss/modal";
+@import "bootstrap/scss/modal";
 //@import "bootstrap/scss/tooltip";
 //@import "bootstrap/scss/popover";
 //@import "bootstrap/scss/carousel";
@@ -56,7 +56,8 @@ $secondary: $logo-palette-5;
 @import "./avatar";
 @import "./theme-toggle";
 
-svg  {
+// bootstrap icon
+svg.bi {
   width: 1em;
   height: 1em;
   display: inline-block;

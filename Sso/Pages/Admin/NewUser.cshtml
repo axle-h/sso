@@ -3,7 +3,6 @@
 
 @{
     Layout = "_LayoutHero";
-    bool FieldValid(string name) => ModelState.IsValid && (ModelState[name]?.Errors.Count ?? 0) == 0;
 }
 
 <h1 class="hero-title">
@@ -11,16 +10,11 @@
 </h1>
 
 <form method="post">
-    @if (!ModelState.IsValid && ModelState[""] is not null && ModelState[""]!.Errors.Count > 0)
-    {
-        <p class="form-text text-danger">
-            @ModelState[""]!.Errors.First().ErrorMessage
-        </p>
-    }
+    <partial name="_ValidationSummary" />
     
     <div class="form-outline mb-3">
         <input asp-for="Model.Username" type="text" class="form-control form-control-lg" required>
-        @if (FieldValid("Model.Username"))
+        @if (ModelState.IsFieldValid("Model.Username"))
         {
             <label asp-for="Model.Username" class="form-label">Username</label>
         }
@@ -32,7 +26,7 @@
 
     <div class="form-outline mb-3">
         <input asp-for="Model.Password" type="password" class="form-control form-control-lg" required/>
-        @if (FieldValid("Model.Password"))
+        @if (ModelState.IsFieldValid("Model.Password"))
         {
             <label asp-for="Model.Password" class="form-label">Password</label>
         }
@@ -63,7 +57,7 @@
             <div class="col">
                 <div class="form-outline mb-3">
                     <input asp-for="Model.FirstName" type="text" class="form-control form-control-lg" required>
-                    @if (FieldValid("Model.FirstName"))
+                    @if (ModelState.IsFieldValid("Model.FirstName"))
                     {
                         <label asp-for="Model.FirstName" class="form-label">First Name</label>
                     }
@@ -76,7 +70,7 @@
             <div class="col">
                 <div class="form-outline mb-3">
                     <input asp-for="Model.LastName" type="text" class="form-control form-control-lg" required>
-                    @if (FieldValid("Model.LastName"))
+                    @if (ModelState.IsFieldValid("Model.LastName"))
                     {
                         <label asp-for="Model.LastName" class="form-label">Last Name</label>
                     }
@@ -90,7 +84,7 @@
 
         <div class="form-outline mb-3">
             <input asp-for="Model.Email" type="email" class="form-control form-control-lg" required>
-            @if (FieldValid("Model.Email"))
+            @if (ModelState.IsFieldValid("Model.Email"))
             {
                 <label asp-for="Model.Email" class="form-label">Email</label>
             }
@@ -99,7 +93,6 @@
                 <span asp-validation-for="Model.Email" class="text-danger"></span>
             }
         </div>
-
     </fieldset>
 
     <button class="btn btn-outline-primary btn-lg btn-block px-5" type="submit">Create</button>

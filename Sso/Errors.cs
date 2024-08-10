@@ -1,9 +1,14 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Sso;
 
 public static class Errors
 {
+    public static bool IsFieldValid(this ModelStateDictionary modelState, string name) =>
+        modelState.IsValid && (!modelState.TryGetValue(name, out var state) || state.Errors.Count == 0);
+    
     public static string? GetPasswordError(this IdentityResult result)
     {
         var errorCodes = result.Errors.Select(e => e.Code).ToHashSet();
@@ -70,5 +75,11 @@ public static class Errors
         }
 
         return null;
+    }
+
+    public static string GetGenericError(this IdentityResult result)
+    {
+        var identityErrors = result.Errors.Select(e => e.Description);
+        return string.Join(", ", identityErrors);
     }
 }

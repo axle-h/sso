@@ -9,7 +9,7 @@ using Sso.Identity;
 namespace Sso.Pages.Admin;
 
 [Authorize(Roles = "admin")]
-public class NewUser(UserManager<SsoUser> userManager, RoleManager<IdentityRole> roleManager) : PageModel
+public class NewUser(SsoUserManager userManager, RoleManager<IdentityRole> roleManager) : PageModel
 {
 
     [BindProperty]
@@ -64,22 +64,18 @@ public class NewUser(UserManager<SsoUser> userManager, RoleManager<IdentityRole>
                 return await InitPage();
             }
 
-            var identityErrors = createdUser.Errors.Select(e => e.Description);
-            ModelState.AddModelError("", string.Join(", ", identityErrors));
+            ModelState.AddModelError("", createdUser.GetGenericError());
             return await InitPage();
         }
         
-        foreach (var role in Model.Roles)
+        var result = await userManager.AddToRolesAsync(user, Model.Roles);
+        if (!result.Succeeded)
         {
-            var result = await userManager.AddToRoleAsync(user, role);
-            if (!result.Succeeded)
-            {
-                ModelState.AddModelError("Model.Roles", $"Failed to add user to role {role}");
-            }
+            ModelState.AddModelError("Model.Roles", result.GetGenericError());
         }
         
         // TODO toast somehow
-        return Redirect("~/");
+        return Redirect("/Admin/ListUsers");
     }
 
     private async Task<IActionResult> InitPage()
