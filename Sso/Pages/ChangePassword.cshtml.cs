@@ -42,31 +42,7 @@ public class ChangePassword(UserManager<SsoUser> userManager) : PageModel
             return Redirect("~/");
         }
 
-        var errorCodes = result.Errors.Select(e => e.Code).ToHashSet();
-        if (errorCodes.Contains(nameof(IdentityErrorDescriber.PasswordTooShort)))
-        {
-            ModelState.AddModelError(string.Empty, "That password is too short");            
-        }
-        else if (errorCodes.Contains(nameof(IdentityErrorDescriber.PasswordRequiresNonAlphanumeric)))
-        {
-            ModelState.AddModelError(string.Empty, "That password needs some special characters");            
-        }
-        else if (errorCodes.Contains(nameof(IdentityErrorDescriber.PasswordRequiresDigit)))
-        {
-            ModelState.AddModelError(string.Empty, "That password needs some numbers");            
-        }
-        else if (errorCodes.Contains(nameof(IdentityErrorDescriber.PasswordRequiresLower)))
-        {
-            ModelState.AddModelError(string.Empty, "That password needs some lower case letters");            
-        }
-        else if (errorCodes.Contains(nameof(IdentityErrorDescriber.PasswordRequiresUpper)))
-        {
-            ModelState.AddModelError(string.Empty, "That password needs some upper case letters");            
-        }
-        else
-        {
-            ModelState.AddModelError(string.Empty, "That password is too weak");
-        }
+        ModelState.AddModelError(string.Empty, result.GetPasswordError() ?? "That password is not good"); 
 
         return CleanPage();
     }

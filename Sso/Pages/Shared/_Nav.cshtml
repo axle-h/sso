@@ -22,8 +22,13 @@
                         <span class="avatar">@user.Initials()</span>
                     </a>
                     <ul class="dropdown-menu" style="right: 0; left: initial;">
-                        <li><a class="dropdown-item" asp-page="/Logout/Index">Logout</a></li>
                         <li><a class="dropdown-item" asp-page="/ChangePassword">Change Password</a></li>
+                        @if (await UserManager.IsInRoleAsync(user, "admin"))
+                        {
+                            <li><a class="dropdown-item" asp-page="/Admin/NewUser">New User</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                        }
+                        <li><a class="dropdown-item" asp-page="/Logout/Index">Logout</a></li>
                     </ul>
                 </li>
             }

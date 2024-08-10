@@ -5,7 +5,7 @@
     Layout = "_LayoutHero";
 }
 
-<h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">
+<h1 class="hero-title">
     @if (ViewContext.ModelState.IsValid == false)
     {
         <span class="text-danger">
@@ -16,7 +16,7 @@
     {
         <b>Hi!</b> <text>Sign in to your ax-h account.</text>
     }
-</h5>
+</h1>
 
 <form asp-page="/Login">
     <input type="hidden" asp-for="ReturnUrl" />

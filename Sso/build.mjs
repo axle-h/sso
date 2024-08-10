@@ -40,7 +40,8 @@ await esbuild.build({
         }),
         sassPlugin(),
         purgeCSSPlugin({
-            content: ['./Pages/**/*.cshtml', "wwwroot/app/**/*.js"]
+            content: ['./Pages/**/*.cshtml', "wwwroot/app/**/*.js"],
+            safelist: ['input-validation-error']
         }),
     ]
 })

@@ -15,6 +15,7 @@ public partial class InitialUsers : Migration
         var factory = new DataFactory(migrationBuilder);
         factory.Role("afba81f5-a308-4fdf-a8e0-32e0e4755363", "make-money");
         factory.Role("47e94660-dfcf-42c1-9e2e-1b496ce55b2c", "make-movies");
+        factory.Role("980277c0-22d0-4dc1-affc-5e5d98fefe40", "admin");
         
         factory.User(
             "310a5cab-8d15-4d45-b178-a3b1be01c3b2",
@@ -23,7 +24,7 @@ public partial class InitialUsers : Migration
             "Alex",
             "Haslehurst",
             "alex.haslehurst@gmail.com",
-            "make-money", "make-movies"
+            "make-money", "make-movies", "admin"
         );
     }
 

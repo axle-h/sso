@@ -1,0 +1,106 @@
+@page
+@model Sso.Pages.Admin.NewUser
+
+@{
+    Layout = "_LayoutHero";
+    bool FieldValid(string name) => ModelState.IsValid && (ModelState[name]?.Errors.Count ?? 0) == 0;
+}
+
+<h1 class="hero-title">
+    New user
+</h1>
+
+<form method="post">
+    @if (!ModelState.IsValid && ModelState[""] is not null && ModelState[""]!.Errors.Count > 0)
+    {
+        <p class="form-text text-danger">
+            @ModelState[""]!.Errors.First().ErrorMessage
+        </p>
+    }
+    
+    <div class="form-outline mb-3">
+        <input asp-for="Model.Username" type="text" class="form-control form-control-lg" required>
+        @if (FieldValid("Model.Username"))
+        {
+            <label asp-for="Model.Username" class="form-label">Username</label>
+        }
+        else
+        {
+            <span asp-validation-for="Model.Username" class="text-danger"></span>
+        }
+    </div>
+
+    <div class="form-outline mb-3">
+        <input asp-for="Model.Password" type="password" class="form-control form-control-lg" required/>
+        @if (FieldValid("Model.Password"))
+        {
+            <label asp-for="Model.Password" class="form-label">Password</label>
+        }
+        else
+        {
+            <span asp-validation-for="Model.Password" class="text-danger"></span>
+        }
+    </div>
+
+    <fieldset class="mb-3">
+        <legend>Roles</legend>
+        @foreach (var role in Model.RoleOptions)
+        {
+            <div class="form-check">
+                <input name="Model.Roles" class="form-check-input" type="checkbox" value="@role.Name" id="role-@role.Name" checked="@role.Selected">
+                <label for="role-@role.Name" class="form-check-label">
+                    @role.Name
+                </label>
+            </div>
+        }
+        <span asp-validation-for="Model.Roles" class="text-danger"></span>
+    </fieldset>
+
+
+    <fieldset class="mb-3">
+        <legend>Personal</legend>
+        <div class="row">
+            <div class="col">
+                <div class="form-outline mb-3">
+                    <input asp-for="Model.FirstName" type="text" class="form-control form-control-lg" required>
+                    @if (FieldValid("Model.FirstName"))
+                    {
+                        <label asp-for="Model.FirstName" class="form-label">First Name</label>
+                    }
+                    else
+                    {
+                        <span asp-validation-for="Model.FirstName" class="text-danger"></span>
+                    }
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-outline mb-3">
+                    <input asp-for="Model.LastName" type="text" class="form-control form-control-lg" required>
+                    @if (FieldValid("Model.LastName"))
+                    {
+                        <label asp-for="Model.LastName" class="form-label">Last Name</label>
+                    }
+                    else
+                    {
+                        <span asp-validation-for="Model.LastName" class="text-danger"></span>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="form-outline mb-3">
+            <input asp-for="Model.Email" type="email" class="form-control form-control-lg" required>
+            @if (FieldValid("Model.Email"))
+            {
+                <label asp-for="Model.Email" class="form-label">Email</label>
+            }
+            else
+            {
+                <span asp-validation-for="Model.Email" class="text-danger"></span>
+            }
+        </div>
+
+    </fieldset>
+
+    <button class="btn btn-outline-primary btn-lg btn-block px-5" type="submit">Create</button>
+</form>
