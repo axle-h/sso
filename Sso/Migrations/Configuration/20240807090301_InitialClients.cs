@@ -1,5 +1,6 @@
 ﻿using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
+using IdentityModel;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Serilog;
 using ILogger = Serilog.ILogger;
@@ -15,6 +16,54 @@ public partial class InitialClients : Migration
     protected override void Up(MigrationBuilder migrationBuilder)
     {
         var factory = new DataFactory(migrationBuilder);
+        
+        factory.IdentityResource(
+            IdentityServerConstants.StandardScopes.OpenId,
+            "Your user identifier",
+            null,
+            true, 
+            false, 
+            [JwtClaimTypes.Subject]
+        );
+        factory.IdentityResource(
+            IdentityServerConstants.StandardScopes.Profile, 
+            "User profile",
+            "Your user profile information (first name, last name, etc.)",
+            false, 
+            true, 
+            [
+                JwtClaimTypes.Name,
+                JwtClaimTypes.FamilyName,
+                JwtClaimTypes.GivenName,
+                JwtClaimTypes.MiddleName,
+                JwtClaimTypes.NickName,
+                JwtClaimTypes.PreferredUserName,
+                JwtClaimTypes.Profile,
+                JwtClaimTypes.Picture,
+                JwtClaimTypes.WebSite,
+                JwtClaimTypes.Gender,
+                JwtClaimTypes.BirthDate,
+                JwtClaimTypes.ZoneInfo,
+                JwtClaimTypes.Locale,
+                JwtClaimTypes.UpdatedAt
+            ]);
+        factory.IdentityResource(
+            IdentityServerConstants.StandardScopes.Email,
+            "Your email address",
+            null,
+            false, 
+            true, 
+            [JwtClaimTypes.Email, JwtClaimTypes.EmailVerified]
+        );
+        factory.IdentityResource(
+            "roles",
+            "Roles",
+            null,
+            true, 
+            false, 
+            [JwtClaimTypes.Role]
+        );
+        factory.ApiScope("read_users", "List Users", "Grants access to the list users API");
             
         factory.Client("make-money", "Make Money", GrantTypes.CodeAndClientCredentials, ["openid", "profile", "email", "roles"])
             .RandomSecret()
@@ -29,6 +78,16 @@ public partial class InitialClients : Migration
             .FrontChannelLogoutUri("https://movies.ax-h.com/logout")
             .PostLogoutRedirectUri("https://movies.ax-h.com/")
             .AllowOfflineAccess();
+        
+        factory.Client("risk", "Risk With Friends", GrantTypes.CodeAndClientCredentials, ["openid", "profile", "email", "roles", "read_users"])
+            .RandomSecret()
+            .RedirectUri("https://risk.ax-h.com/api/auth/callback/axh-sso")
+            .FrontChannelLogoutUri("https://risk.ax-h.com/logout")
+            .PostLogoutRedirectUri("https://risk.ax-h.com/")
+            // .RedirectUri("http://localhost:3000/api/auth/callback/axh-sso")
+            // .FrontChannelLogoutUri("http://localhost:3000/logout")
+            // .PostLogoutRedirectUri("http://localhost:3000/")
+            .AllowOfflineAccess();
     }
 
     /// <inheritdoc />
@@ -37,12 +96,19 @@ public partial class InitialClients : Migration
         // this should cascade
         migrationBuilder.DeleteData("Clients", "ClientId", "make-money");
         migrationBuilder.DeleteData("Clients", "ClientId", "make-movies");
+        migrationBuilder.DeleteData("Clients", "ClientId", "risk");
+        migrationBuilder.DeleteData("IdentityResources", "Name", IdentityServerConstants.StandardScopes.OpenId);
+        migrationBuilder.DeleteData("IdentityResources", "Name", IdentityServerConstants.StandardScopes.Profile);
+        migrationBuilder.DeleteData("IdentityResources", "Name", IdentityServerConstants.StandardScopes.Email);
+        migrationBuilder.DeleteData("IdentityResources", "Name", "roles");
+        migrationBuilder.DeleteData("ApiScopes", "Name", "read_users");
     }
 }
 
 internal class DataFactory(MigrationBuilder migrationBuilder)
 {
     private int _nextClientPk = 1;
+    private int _nextIdentityResourceId = 1;
     
     public ClientBuilder Client(string clientId, string name, IEnumerable<string> grants, IEnumerable<string> scopes)
     {
@@ -88,6 +154,30 @@ internal class DataFactory(MigrationBuilder migrationBuilder)
         }
         
         return new ClientBuilder(migrationBuilder, id, clientId);
+    }
+    
+    public void ApiScope(string name, string displayName, string description)
+    {
+        migrationBuilder.InsertData(
+            "ApiScopes",
+            ["Enabled", "Name", "DisplayName", "Description", "Required", "Emphasize", "ShowInDiscoveryDocument", "Created", "NonEditable"],
+            [true, name, displayName, description, false, false, true, DateTime.UtcNow, false]
+        );
+    }
+
+    public void IdentityResource(string name, string displayName, string description, bool required, bool emphasize, IEnumerable<string> claims)
+    {
+        var id = _nextIdentityResourceId++;
+        migrationBuilder.InsertData(
+            "IdentityResources",
+            ["Id", "Enabled", "Name", "DisplayName", "Description", "Required", "Emphasize", "ShowInDiscoveryDocument", "Created", "NonEditable"],
+            [id, true, name, displayName, description, required, emphasize, true, DateTime.UtcNow, false]
+        );
+
+        foreach (var claim in claims)
+        {
+            migrationBuilder.InsertData("IdentityResourceClaims", ["IdentityResourceId", "Type"], [id, claim]);
+        }
     }
 }
 

@@ -15,16 +15,17 @@ public partial class InitialUsers : Migration
         var factory = new DataFactory(migrationBuilder);
         factory.Role("afba81f5-a308-4fdf-a8e0-32e0e4755363", "make-money");
         factory.Role("47e94660-dfcf-42c1-9e2e-1b496ce55b2c", "make-movies");
+        factory.Role("407a0482-fb56-42a8-a34b-1cb320d668c1", "risk");
         factory.Role("980277c0-22d0-4dc1-affc-5e5d98fefe40", "admin");
         
         factory.User(
             "310a5cab-8d15-4d45-b178-a3b1be01c3b2",
             "alex",
-            "some_secret_password",
+            "password",
             "Alex",
             "Haslehurst",
             "alex.haslehurst@gmail.com",
-            "make-money", "make-movies", "admin"
+            "make-money", "make-movies", "risk", "admin"
         );
     }
 
@@ -34,6 +35,8 @@ public partial class InitialUsers : Migration
         migrationBuilder.DeleteData("Users", "Id", "310a5cab-8d15-4d45-b178-a3b1be01c3b2");
         migrationBuilder.DeleteData("Roles", "Id", "afba81f5-a308-4fdf-a8e0-32e0e4755363");
         migrationBuilder.DeleteData("Roles", "Id", "47e94660-dfcf-42c1-9e2e-1b496ce55b2c");
+        migrationBuilder.DeleteData("Roles", "Id", "407a0482-fb56-42a8-a34b-1cb320d668c1");
+        migrationBuilder.DeleteData("Roles", "Id", "980277c0-22d0-4dc1-affc-5e5d98fefe40");
     }
 }
 

@@ -1,5 +1,4 @@
-﻿using Duende.IdentityServer.Models;
-using IdentityModel;
+﻿using Duende.IdentityServer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +17,7 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
 builder.Services.AddHealthChecks();
 
 builder.Services.AddRazorPages();
+builder.Services.AddControllers();
 
 var dbUrl = builder.Configuration.GetConnectionString("Db") ??
             throw new InvalidOperationException("Db connection string is required");
@@ -53,16 +53,16 @@ builder.Services
     .AddTokenProvider<DataProtectorTokenProvider<SsoUser>>(TokenOptions.DefaultProvider);
 
 var issuerUri = builder.Configuration.GetConnectionString("IssuerUri");
-var isBuilder = builder.Services.AddIdentityServer(options =>
+builder.Services.AddIdentityServer(options =>
     {
         options.IssuerUri = issuerUri;
-        
+
         options.UserInteraction.LoginUrl = "/Login";
         options.UserInteraction.LogoutUrl = "/Logout";
         options.UserInteraction.ErrorUrl = "/Error";
-        
+
         options.KeyManagement.Enabled = true;
-                
+
         options.Events.RaiseErrorEvents = true;
         options.Events.RaiseInformationEvents = true;
         options.Events.RaiseFailureEvents = true;
@@ -90,18 +90,17 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.SlidingExpiration = true;
 });
 
-
-isBuilder.AddInMemoryIdentityResources([
-    new IdentityResources.OpenId(),
-    new IdentityResources.Profile(),
-    new IdentityResources.Email(),
-    new IdentityResource
+// Add authentication for the local API
+builder.Services.AddAuthentication().AddLocalApi();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("read_users", policy =>
     {
-        Name = "roles",
-        DisplayName = "Roles",
-        UserClaims = { JwtClaimTypes.Role }
-    }
-]);
+        policy.AddAuthenticationSchemes(IdentityServerConstants.LocalApi.AuthenticationScheme);
+        policy.RequireAuthenticatedUser();
+        policy.RequireClaim("scope", "read_users");
+    });
+});
 
 builder.Services
     .AddHostedService<MigrationService>()
@@ -141,7 +140,9 @@ app.UseStatusCodePagesWithReExecute("/Error/Status/{0}");
 
 app.UseIdentityServer();
 app.UseAuthorization();
-        
+
+app.MapControllers();
+
 app.MapRazorPages()
     .RequireAuthorization();
 
