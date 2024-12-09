@@ -43,7 +43,7 @@ public class Index(
         }
 
         var result = await signInManager.PasswordSignInAsync(
-            Username!,
+            Username!.Trim(),
             Password!,
             isPersistent: false,
             lockoutOnFailure: true
