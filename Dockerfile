@@ -1,4 +1,4 @@
-FROM node:20-alpine AS node-build
+FROM node:24-alpine AS node-build
 WORKDIR /app
 
 COPY Sso/package.json Sso/package-lock.json* ./
@@ -9,7 +9,7 @@ COPY Sso ./
 RUN npm run build
 
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS dotnet-build
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS dotnet-build
 WORKDIR /app
 
 RUN dotnet nuget locals all --clear
@@ -25,7 +25,7 @@ COPY Sso Sso
 RUN dotnet publish -c Release -o dist --no-restore Sso
 
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+FROM mcr.microsoft.com/dotnet/aspnet:10.0
 
 RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
