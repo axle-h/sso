@@ -1,6 +1,6 @@
-﻿using Duende.IdentityModel;
-using Duende.IdentityServer;
+﻿using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
+using Duende.IdentityModel;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Serilog;
 using ILogger = Serilog.ILogger;
@@ -84,6 +84,9 @@ public partial class InitialClients : Migration
             .RedirectUri("https://risk.ax-h.com/api/auth/callback/axh-sso")
             .FrontChannelLogoutUri("https://risk.ax-h.com/logout")
             .PostLogoutRedirectUri("https://risk.ax-h.com/")
+            // .RedirectUri("http://localhost:3000/api/auth/callback/axh-sso")
+            // .FrontChannelLogoutUri("http://localhost:3000/logout")
+            // .PostLogoutRedirectUri("http://localhost:3000/")
             .AllowOfflineAccess();
     }
 
