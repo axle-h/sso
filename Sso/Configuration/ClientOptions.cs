@@ -36,7 +36,7 @@ public static class ClientConfiguration
     private const string CallbackPath = "/api/auth/callback/axh-sso";
     private const string LogoutPath = "/logout";
 
-    public static IReadOnlyList<Client> ToClients(this IDictionary<string, ClientOptions> options)
+    public static List<Client> ToClients(this IDictionary<string, ClientOptions> options)
     {
         if (options.Count == 0)
         {

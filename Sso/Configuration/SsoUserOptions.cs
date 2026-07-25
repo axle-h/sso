@@ -4,7 +4,7 @@ namespace Sso.Configuration;
 /// A user, bound from the "Users" section. There is no admin UI, config is the source of truth
 /// for who exists and what roles they hold.
 /// </summary>
-public class UserOptions
+public class SsoUserOptions
 {
     public const string SectionName = "Users";
 

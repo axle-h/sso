@@ -15,7 +15,7 @@ public class UserSeedService(
 {
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        var users = configuration.GetSection(UserOptions.SectionName).Get<List<UserOptions>>() ?? [];
+        var users = configuration.GetSection(SsoUserOptions.SectionName).Get<List<SsoUserOptions>>() ?? [];
         if (users.Count == 0)
         {
             logger.LogWarning("no users configured, nobody will be able to log in");
@@ -51,12 +51,12 @@ public class UserSeedService(
 
     public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
-    private async Task SeedUser(UserManager<SsoUser> userManager, UserOptions options)
+    private async Task SeedUser(UserManager<SsoUser> userManager, SsoUserOptions options)
     {
         var username = options.Username?.Trim();
         if (string.IsNullOrWhiteSpace(username))
         {
-            throw new InvalidOperationException($"a configured user has no username, set {UserOptions.SectionName}__n__Username");
+            throw new InvalidOperationException($"a configured user has no username, set {SsoUserOptions.SectionName}__n__Username");
         }
 
         var user = await userManager.FindByNameAsync(username);
@@ -66,7 +66,7 @@ public class UserSeedService(
             {
                 throw new InvalidOperationException(
                     $"user '{username}' does not exist and has no password configured, " +
-                    $"set {UserOptions.SectionName}__n__Password to create them");
+                    $"set {SsoUserOptions.SectionName}__n__Password to create them");
             }
 
             logger.LogInformation("creating user {Username}", username);
@@ -92,7 +92,7 @@ public class UserSeedService(
     /// <summary>
     /// Config owns the profile. The password is deliberately left alone, it is whatever the user last set.
     /// </summary>
-    private static bool SyncProfile(SsoUser user, UserOptions options)
+    private static bool SyncProfile(SsoUser user, SsoUserOptions options)
     {
         var changed = false;
 
@@ -118,7 +118,7 @@ public class UserSeedService(
         return changed;
     }
 
-    private async Task SyncRoles(UserManager<SsoUser> userManager, SsoUser user, string username, UserOptions options)
+    private async Task SyncRoles(UserManager<SsoUser> userManager, SsoUser user, string username, SsoUserOptions options)
     {
         var current = await userManager.GetRolesAsync(user);
         var desired = options.Roles.Select(r => r.Trim()).ToList();
