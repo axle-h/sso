@@ -72,6 +72,19 @@ dotnet user-secrets set "Users:0:Password" "<password>"
 dotnet run
 ```
 
+## UI
+
+Bootstrap is bundled with esbuild and trimmed with purgecss into `wwwroot/app`, which is
+gitignored, so the assets have to be built before the app will render properly. pnpm is
+pinned in `package.json` and comes from corepack.
+
+```shell
+corepack enable
+cd Sso
+pnpm install
+pnpm run build
+```
+
 ## DB
 
 Only ASP.NET Identity and the IdentityServer operational store (grants, keys) are

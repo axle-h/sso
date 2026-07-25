@@ -25,24 +25,35 @@ jobs:
   build-node:
     runs-on: ubuntu-latest
     container: node:24
+    env:
+      COREPACK_ENABLE_DOWNLOAD_PROMPT: "0"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Cache node modules
+      # corepack reads the pnpm version pinned in package.json
+      - name: Enable pnpm
+        run: corepack enable
+
+      - name: Resolve pnpm store
+        id: pnpm-store
+        run: echo "path=$(pnpm store path)" >> "$GITHUB_OUTPUT"
+        working-directory: Sso
+
+      - name: Cache pnpm store
         uses: actions/cache@v4
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          path: ${{ steps.pnpm-store.outputs.path }}
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-node-
+            ${{ runner.os }}-pnpm-
 
-      - name: Restore npm packages
-        run: npm ci
+      - name: Restore pnpm packages
+        run: pnpm install --frozen-lockfile
         working-directory: Sso
 
       - name: Build
-        run: npm run build
+        run: pnpm run build
         working-directory: Sso
 
   docker:

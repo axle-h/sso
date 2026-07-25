@@ -1,12 +1,16 @@
 FROM node:24-alpine AS node-build
 WORKDIR /app
 
-COPY Sso/package.json Sso/package-lock.json* ./
-RUN npm ci
+# corepack reads the pnpm version pinned in package.json
+ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+RUN corepack enable
+
+COPY Sso/package.json Sso/pnpm-lock.yaml Sso/pnpm-workspace.yaml ./
+RUN pnpm install --frozen-lockfile
 
 # we need everything including the dotnet app for purgecss
 COPY Sso ./
-RUN npm run build
+RUN pnpm run build
 
 
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS dotnet-build

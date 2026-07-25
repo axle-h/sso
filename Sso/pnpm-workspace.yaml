@@ -1,0 +1,5 @@
+# esbuild's postinstall picks the native binary for the platform, it has to run.
+# @parcel/watcher is only pulled in for watch mode, which this build never uses.
+allowBuilds:
+  esbuild: true
+  '@parcel/watcher': false
