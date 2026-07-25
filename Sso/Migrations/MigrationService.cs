@@ -28,7 +28,6 @@ public class MigrationService(
         List<DbContext> contexts =
         [
             scope.ServiceProvider.GetRequiredService<SsoDbContext>(),
-            scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>(),
             scope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>()
         ];
 

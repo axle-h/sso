@@ -1,7 +1,8 @@
 @page
+@using Microsoft.AspNetCore.Identity
 @using Sso.Identity
 
-@inject SsoUserManager UserManager;
+@inject UserManager<SsoUser> UserManager;
 
 @{
     Layout = "_LayoutHero";

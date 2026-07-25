@@ -1,0 +1,26 @@
+// show/hide toggle sat next to a password input, see forms.mjs
+.password-input {
+  .password-toggle {
+    // sit above the floating label so the whole button stays clickable
+    z-index: 5;
+
+    .bi-eye-slash {
+      display: none;
+    }
+  }
+
+  &.is-visible .password-toggle {
+    .bi-eye {
+      display: none;
+    }
+
+    .bi-eye-slash {
+      display: inline-block;
+    }
+  }
+}
+
+// stop the button collapsing when the label is swapped for a spinner
+.submit-button {
+  min-width: 8rem;
+}

@@ -24,6 +24,8 @@ public class Index(
     [Required]
     public string? Password { get; set; }
 
+    public bool RememberMe { get; set; }
+
     public string? ReturnUrl { get; set; }
 
     public IActionResult OnGet(string? returnUrl)
@@ -45,7 +47,7 @@ public class Index(
         var result = await signInManager.PasswordSignInAsync(
             Username!.Trim(),
             Password!,
-            isPersistent: false,
+            isPersistent: RememberMe,
             lockoutOnFailure: true
         );
 

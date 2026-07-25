@@ -24,6 +24,10 @@ spec:
           env:
             - name: ASPNETCORE_FORWARDEDHEADERS_ENABLED
               value: "true"
+          envFrom:
+            # client secrets and the initial user password, see README.md
+            - secretRef:
+                name: sso
           volumeMounts:
             - name: data
               mountPath: /data

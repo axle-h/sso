@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Events;
+using Sso.Configuration;
 using Sso.Identity;
 using Sso.Migrations;
 
@@ -47,10 +48,15 @@ builder.Services
         options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
         options.Lockout.MaxFailedAccessAttempts = 5;
     })
-    .AddUserManager<SsoUserManager>()
     .AddEntityFrameworkStores<SsoDbContext>()
     .AddClaimsPrincipalFactory<SsoUserClaimsPrincipalFactory>()
     .AddTokenProvider<DataProtectorTokenProvider<SsoUser>>(TokenOptions.DefaultProvider);
+
+// clients live in config rather than the database, there are only a handful of them and
+// they change about as often as this app is deployed
+var clientOptions = builder.Configuration.GetSection(ClientConfiguration.SectionName)
+    .Get<Dictionary<string, ClientOptions>>() ?? new Dictionary<string, ClientOptions>();
+var clients = clientOptions.ToClients();
 
 var issuerUri = builder.Configuration.GetConnectionString("IssuerUri");
 builder.Services.AddIdentityServer(options =>
@@ -71,7 +77,11 @@ builder.Services.AddIdentityServer(options =>
         // see https://docs.duendesoftware.com/identityserver/v6/fundamentals/resources/
         options.EmitStaticAudienceClaim = true;
     })
-    .AddConfigurationStore(options => options.ConfigureDbContext = dbBuilder)
+    .AddInMemoryIdentityResources(SsoResources.Identity)
+    .AddInMemoryApiScopes(SsoResources.Api)
+    .AddInMemoryClients(clients)
+    // grants and signing keys are still persisted, dropping them would sign everyone
+    // out of every client on each restart
     .AddOperationalStore(options => options.ConfigureDbContext = dbBuilder)
     .AddAspNetIdentity<SsoUser>();
 
@@ -94,11 +104,11 @@ builder.Services.ConfigureApplicationCookie(options =>
 builder.Services.AddAuthentication().AddLocalApi();
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("read_users", policy =>
+    options.AddPolicy(SsoResources.ReadUsersScope, policy =>
     {
         policy.AddAuthenticationSchemes(IdentityServerConstants.LocalApi.AuthenticationScheme);
         policy.RequireAuthenticatedUser();
-        policy.RequireClaim("scope", "read_users");
+        policy.RequireClaim("scope", SsoResources.ReadUsersScope);
     });
 });
 
@@ -106,6 +116,9 @@ builder.Services
     .AddHostedService<MigrationService>()
     .AddOptions<MigrationOptions>()
     .BindConfiguration("Migration");
+
+// must be registered after the migration service, hosted services start in registration order
+builder.Services.AddHostedService<UserSeedService>();
 
 var app = builder.Build();
 

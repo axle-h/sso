@@ -2,11 +2,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Sso.Configuration;
 using Sso.Identity;
 
 namespace Sso.Api;
 
-[Authorize("read_users")]
+[Authorize(SsoResources.ReadUsersScope)]
 [Route("api/[controller]")]
 [ApiController]
 public class UsersController(UserManager<SsoUser> userManager) : ControllerBase

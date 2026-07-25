@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Sso.Identity;
@@ -6,7 +7,7 @@ using Sso.Identity;
 namespace Sso.Pages;
 
 [BindProperties]
-public class ChangePassword(SsoUserManager userManager) : PageModel
+public class ChangePassword(UserManager<SsoUser> userManager) : PageModel
 {
     [Required] public string NewPassword { get; set; } = string.Empty;
     [Required] public string ConfirmPassword { get; set; } = string.Empty;

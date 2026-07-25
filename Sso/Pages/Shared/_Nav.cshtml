@@ -1,7 +1,8 @@
+@using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Sso.Identity
 
-@inject SsoUserManager UserManager
+@inject UserManager<SsoUser> UserManager
 
 @{
     var user = await UserManager.GetUserAsync(User);
@@ -22,11 +23,7 @@
                     </a>
                     <ul class="dropdown-menu" style="right: 0; left: initial;">
                         <li><a class="dropdown-item" asp-page="/ChangePassword">Change Password</a></li>
-                        @if (await UserManager.IsInRoleAsync(user, "admin"))
-                        {
-                            <li><a class="dropdown-item" asp-page="/Admin/ListUsers">Manage Users</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                        }
+                        <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" asp-page="/Logout/Index">Logout</a></li>
                     </ul>
                 </li>
