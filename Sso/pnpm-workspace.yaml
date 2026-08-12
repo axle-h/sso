@@ -1,0 +1,14 @@
+# pnpm settings live here, not .npmrc (pnpm 11 reads only auth/registry from .npmrc).
+
+# Refuse to install any version published in the last 24h. Compromised packages are
+# typically caught and unpublished well inside this window.
+minimumReleaseAge: 1440
+
+# Dependency lifecycle scripts are deny-by-default. Only packages listed here may run
+# them; anything else fails the install (strictDepBuilds) until reviewed.
+allowBuilds:
+  # postinstall selects/links the platform-specific esbuild binary.
+  esbuild: true
+  # Pulled in by Dart Sass purely for `sass --watch`; build.mjs is one-shot, so it is
+  # never used. Its install script builds from source via node-gyp — denied.
+  '@parcel/watcher': false

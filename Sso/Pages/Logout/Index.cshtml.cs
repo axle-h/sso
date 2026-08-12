@@ -28,9 +28,9 @@ public class Index(
         // if there's no current logout context, we need to create one
         // this captures necessary info from the current logged in user
         // this can still return null if there is no context needed
-        logoutId ??= await interaction.CreateLogoutContextAsync();
+        logoutId ??= await interaction.CreateLogoutContextAsync(HttpContext.RequestAborted);
 
-        await events.RaiseAsync(new UserLogoutSuccessEvent(User.GetSubjectId(), User.GetDisplayName()));
+        await events.RaiseAsync(new UserLogoutSuccessEvent(User.GetSubjectId(), User.GetDisplayName()), HttpContext.RequestAborted);
         
         await signInManager.SignOutAsync();
 

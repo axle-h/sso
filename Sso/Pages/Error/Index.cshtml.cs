@@ -12,6 +12,6 @@ public class Index(IIdentityServerInteractionService interaction) : PageModel
 
     public async Task OnGet(string? errorId)
     {
-        Error = await interaction.GetErrorContextAsync(errorId);
+        Error = await interaction.GetErrorContextAsync(errorId, HttpContext.RequestAborted);
     }
 }
