@@ -1,12 +1,16 @@
 FROM node:24-alpine AS node-build
 WORKDIR /app
 
-COPY Sso/package.json Sso/package-lock.json* ./
-RUN npm ci
+RUN corepack enable
+
+# no globs: a missing lockfile must fail the build, not silently install unpinned
+COPY Sso/package.json Sso/pnpm-lock.yaml Sso/pnpm-workspace.yaml ./
+# corepack install verifies the pnpm version+hash pinned in packageManager before running it
+RUN corepack install && pnpm install --frozen-lockfile
 
 # we need everything including the dotnet app for purgecss
 COPY Sso ./
-RUN npm run build
+RUN pnpm run build
 
 
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS dotnet-build

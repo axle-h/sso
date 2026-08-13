@@ -13,7 +13,7 @@ public class LoggedOut(IIdentityServerInteractionService interactionService) : P
     public async Task OnGet(string? logoutId)
     {
         // get context information (client name, post logout redirect URI and iframe for federated signout)
-        var logout = await interactionService.GetLogoutContextAsync(logoutId);
+        var logout = await interactionService.GetLogoutContextAsync(logoutId, HttpContext.RequestAborted);
         PostLogoutRedirectUri = logout?.PostLogoutRedirectUri;
         ClientName = string.IsNullOrEmpty(logout?.ClientName) ? logout?.ClientId : logout.ClientName;
     }

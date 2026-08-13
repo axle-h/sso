@@ -35,7 +35,7 @@ public class Index(
     public async Task<IActionResult> OnPost()
     {
         // check if we are in the context of an authorization request
-        var context = await interaction.GetAuthorizationContextAsync(ReturnUrl);
+        var context = await interaction.GetAuthorizationContextAsync(ReturnUrl, HttpContext.RequestAborted);
 
         if (!ModelState.IsValid)
         {
@@ -51,18 +51,18 @@ public class Index(
 
         if (result.Succeeded)
         {
-            await events.RaiseAsync(new UserLoginSuccessEvent(Username, HttpContext.User.GetSubjectId(), HttpContext.User.GetDisplayName(), clientId: context?.Client.ClientId));
+            await events.RaiseAsync(new UserLoginSuccessEvent(Username, HttpContext.User.GetSubjectId(), HttpContext.User.GetDisplayName(), clientId: context?.Client.ClientId), HttpContext.RequestAborted);
             return Redirect(Url.IsLocalUrl(ReturnUrl) ? ReturnUrl : "~/");
         }
 
         if (result.IsLockedOut)
         {
-            await events.RaiseAsync(new UserLoginFailureEvent(Username, "account locked", clientId:context?.Client.ClientId));
+            await events.RaiseAsync(new UserLoginFailureEvent(Username, "account locked", clientId:context?.Client.ClientId), HttpContext.RequestAborted);
             ModelState.AddModelError(string.Empty, "Account is locked, please try again later");
             return CleanPage();
         }
         
-        await events.RaiseAsync(new UserLoginFailureEvent(Username, "invalid credentials", clientId:context?.Client.ClientId));
+        await events.RaiseAsync(new UserLoginFailureEvent(Username, "invalid credentials", clientId:context?.Client.ClientId), HttpContext.RequestAborted);
         ModelState.AddModelError(string.Empty, "Looks like that's the wrong username or password");
         return CleanPage();
     }

@@ -1,0 +1,37 @@
+version: 2
+updates:
+  - package-ecosystem: nuget
+    directory: /Sso
+    schedule:
+      interval: weekly
+    groups:
+      microsoft:
+        patterns:
+          - "Microsoft.*"
+      duende:
+        patterns:
+          - "Duende.*"
+
+  # pnpm lockfiles are handled by the npm ecosystem
+  - package-ecosystem: npm
+    directory: /Sso
+    schedule:
+      interval: weekly
+    groups:
+      esbuild:
+        patterns:
+          - "esbuild*"
+      sass:
+        patterns:
+          - "sass"
+          - "sass-embedded"
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly
