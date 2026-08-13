@@ -1,4 +1,5 @@
 ﻿using Duende.IdentityServer;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -51,6 +52,20 @@ builder.Services
     .AddEntityFrameworkStores<SsoDbContext>()
     .AddClaimsPrincipalFactory<SsoUserClaimsPrincipalFactory>()
     .AddTokenProvider<DataProtectorTokenProvider<SsoUser>>(TokenOptions.DefaultProvider);
+
+// IdentityServer's automatic key management stores its signing keys in the Keys table,
+// encrypted with the data protection key ring. Left at the default the ring lives inside
+// the container and is regenerated on every start, orphaning every key already in the
+// table. Persist it alongside the database so signing keys survive a restart.
+var keyRingPath = builder.Configuration["DataProtection:KeyPath"];
+if (!string.IsNullOrWhiteSpace(keyRingPath))
+{
+    Directory.CreateDirectory(keyRingPath);
+    builder.Services.AddDataProtection()
+        .PersistKeysToFileSystem(new DirectoryInfo(keyRingPath))
+        // pin the discriminator so it doesn't drift with the content root
+        .SetApplicationName("sso");
+}
 
 var issuerUri = builder.Configuration.GetConnectionString("IssuerUri");
 builder.Services.AddIdentityServer(options =>

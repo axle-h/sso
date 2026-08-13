@@ -39,6 +39,9 @@ COPY --from=node-build /app/wwwroot/app ./wwwroot/app/
 
 EXPOSE 8080
 ENV ConnectionStrings__Db "Data Source=/data/sso.db"
+# keep the data protection key ring on the volume so IdentityServer signing keys
+# stay readable across restarts
+ENV DataProtection__KeyPath=/data/keys
 VOLUME /data
 
 HEALTHCHECK CMD curl --fail http://localhost:8080/health/live || exit
