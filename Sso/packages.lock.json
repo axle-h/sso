@@ -4,21 +4,21 @@
     "net10.0": {
       "Duende.IdentityServer.AspNetIdentity": {
         "type": "Direct",
-        "requested": "[8.0.5, )",
-        "resolved": "8.0.5",
-        "contentHash": "sq54kK+jmDgfO+W0d+Xmy0f6M8Vju0+qqV5+McIPZ+1KuVXwkiAN4q7l8C5D8g8D0LZ3UA8Mehy3iEqv7o4r5A==",
+        "requested": "[8.0.6, )",
+        "resolved": "8.0.6",
+        "contentHash": "a9q6EkMI8l+TxAl/UQq0KkauuHLSsH+JadOxD5bh5x3h+XHdyhgrT/XLfnKgCXCvmViDmAy3Xvd3u+sNMfiPDA==",
         "dependencies": {
-          "Duende.IdentityServer": "8.0.5"
+          "Duende.IdentityServer": "8.0.6"
         }
       },
       "Duende.IdentityServer.EntityFramework": {
         "type": "Direct",
-        "requested": "[8.0.5, )",
-        "resolved": "8.0.5",
-        "contentHash": "t3r+sAzJnz/e4t+64ERSVPqfu7InlMwJjiazLwcLr9sZFIwL4Nh6R5C6dCJQqP2LCBDlrcVVsWmceqmOR3fAUA==",
+        "requested": "[8.0.6, )",
+        "resolved": "8.0.6",
+        "contentHash": "ZwtKOHAx/ub8KnnN08Qg0Dr5GJy1GwzPcheInB7phsNJ35cqOpEyKcwxvSiaE7nahnR1YCpYHpAgLoTwknKL2Q==",
         "dependencies": {
-          "Duende.IdentityServer": "8.0.5",
-          "Duende.IdentityServer.EntityFramework.Storage": "8.0.5"
+          "Duende.IdentityServer": "8.0.6",
+          "Duende.IdentityServer.EntityFramework.Storage": "8.0.6"
         }
       },
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
@@ -81,10 +81,10 @@
       },
       "Duende.IdentityServer": {
         "type": "Transitive",
-        "resolved": "8.0.5",
-        "contentHash": "6dF8kIArgKdTsPIMtSAE7huUfd35ICREy8kMFqRUpmQ0B3/nmxCrYFR0UHUf35oHMTIWC+M8P0kYC+cRBpmOWQ==",
+        "resolved": "8.0.6",
+        "contentHash": "gtO/Q9JEKlPyO3yh8mqo7XyCBAvlthD22NDp/M8eDyaeUGsPcyVGuRBPwTFVfN5sjPI7xChlMV+g6m4B67HMMg==",
         "dependencies": {
-          "Duende.IdentityServer.Storage": "8.0.5",
+          "Duende.IdentityServer.Storage": "8.0.6",
           "Duende.Private.Licensing": "2.0.1",
           "Microsoft.AspNetCore.Authentication.OpenIdConnect": "10.0.7",
           "Microsoft.Extensions.Caching.Hybrid": "10.0.0",
@@ -94,17 +94,17 @@
       },
       "Duende.IdentityServer.EntityFramework.Storage": {
         "type": "Transitive",
-        "resolved": "8.0.5",
-        "contentHash": "oSrEh7aODT/ukc1o7FOhaZ+1DdN5JwoI0rb43BEuYByP5VvqYZc/j9D5XBlqpzflqDyTre9p24pYYoHXFVtq4w==",
+        "resolved": "8.0.6",
+        "contentHash": "pD+jVD+wdqn1XXNzMwpYwsUsPCx1GcWTE2ELqp494Zz1xWwTl2QNL7BYENBr+JTueiheRrephj+Uh6jshHlIDg==",
         "dependencies": {
-          "Duende.IdentityServer.Storage": "8.0.5",
+          "Duende.IdentityServer.Storage": "8.0.6",
           "Microsoft.EntityFrameworkCore.Relational": "10.0.7"
         }
       },
       "Duende.IdentityServer.Storage": {
         "type": "Transitive",
-        "resolved": "8.0.5",
-        "contentHash": "tsErLfXeEEcaED3udUw2At7x9UYvfohvfDRWBTADj1tUJme6Oioj2B9AaHbbsf9cabjkTgt+yvf00cWBZ9akrQ==",
+        "resolved": "8.0.6",
+        "contentHash": "ngp6/K31ZNAerkxB7lyfiLI6Zwa8CzX9OirnvSWS7raCVI7Zb1KonfkK2MytqSrC3duPDMIww1aF4yhqIJkBWA==",
         "dependencies": {
           "Duende.IdentityModel": "8.1.0"
         }
